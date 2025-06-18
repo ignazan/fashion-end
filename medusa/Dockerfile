@@ -1,6 +1,6 @@
 FROM node:22
 
-RUN corepack enable && corepack prepare yarn@4.7.0 --activate
+RUN corepack enable && corepack prepare yarn@4.7.0
 
 WORKDIR /app
 
