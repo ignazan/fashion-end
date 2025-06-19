@@ -2,7 +2,7 @@ FROM node:22
 
 RUN corepack enable && corepack prepare yarn@4.7.0
 
-WORKDIR /app
+WORKDIR /app/medusa
 
 COPY package.json yarn.lock .yarnrc.yml ./
 
