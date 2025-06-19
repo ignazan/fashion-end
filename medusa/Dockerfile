@@ -1,6 +1,4 @@
-FROM node:22
-
-RUN corepack enable && corepack prepare yarn@4.7.0
+FROM node:23 as builder
 
 WORKDIR /app/medusa
 
