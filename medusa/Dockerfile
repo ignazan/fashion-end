@@ -8,8 +8,6 @@ RUN yarn install
 
 COPY . .
 
-RUN cp .env.template .env
-
 RUN yarn build
 
 RUN yarn medusa db:migrate && yarn seed
