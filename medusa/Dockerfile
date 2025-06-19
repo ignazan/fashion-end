@@ -1,4 +1,7 @@
-FROM node:23 as builder
+FROM node:20-alpine AS base
+
+FROM base AS builder
+RUN corepack enable
 
 WORKDIR /app/medusa
 
