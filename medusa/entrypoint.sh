@@ -1,7 +1,9 @@
 #!/bin/sh
 
-yarn medusa db:migrate
+npx medusa db:migrate
 
-yarn seed
+npx medusa user -e admin@example.com -p supersecret
+
+npx medusa exec ./src/scripts/seed.ts
 
 yarn start
