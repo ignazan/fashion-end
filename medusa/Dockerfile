@@ -15,4 +15,7 @@ COPY . .
 
 RUN yarn build
 
+RUN yarn medusa db:migrate
+RUN yarn seed
+
 CMD ["yarn", "start"]
