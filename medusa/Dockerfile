@@ -4,7 +4,7 @@ FROM node:20 AS builder
 WORKDIR /app
 
 # Copy the local medusa-config.ts file to override the existing one
-COPY medusa-config.ts /app/medusa-config.ts
+COPY medusa-config.js /app/medusa-config.js
 
 COPY entrypoint.sh /app/entrypoint.sh
 
