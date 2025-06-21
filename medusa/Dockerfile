@@ -1,31 +1,18 @@
-# Use Node.js 20 as a parent image
-FROM node:20 AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy the local medusa-config.ts file to override the existing one
-COPY medusa-config.js /app/medusa-config.js
+# Enable Corepack and prepare latest Yarn (4+)
+RUN corepack enable && corepack prepare yarn@stable --activate
 
-COPY entrypoint.sh /app/entrypoint.sh
+COPY package.json yarn.lock ./
 
-RUN chmod +x /app/entrypoint.sh
+RUN yarn install --immutable
 
-# Install dependencies
-RUN yarn install
+COPY . .
 
-# Build the application
 RUN yarn build
 
-# SECOND STAGE: Minimal image for running the application
-FROM node:20-slim
-
-# Set the working directory
-WORKDIR /app
-
-# Copy necessary files from the builder stage
-COPY --from=builder /app .
-
-# Expose the application port
 EXPOSE 9000
 
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+CMD ["yarn", "start"]
