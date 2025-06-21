@@ -11,7 +11,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --immutable
 
-COPY ./src ./src
+COPY . .
 
 RUN yarn build
 
