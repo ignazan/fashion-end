@@ -1,35 +1,20 @@
-# Use Node.js 20 as a parent image
-FROM node:20 AS builder
+FROM node:20-alpine AS base
 
-# Set the working directory
-WORKDIR /app
+# Install dependencies only when needed
+FROM base AS builder
+RUN corepack enable
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app/mudusa
 
-# Clone the repository
-RUN git clone https://github.com/medusajs/medusa-starter-default.git .
+COPY package.json yarn.lock ./
 
-# Copy the local medusa-config.ts file to override the existing one
-COPY medusa-config.ts /app/medusa-config.ts
+RUN yarn install --immutable
 
-COPY entrypoint.sh /app/entrypoint.sh
+COPY . .
 
-RUN chmod +x /app/entrypoint.sh
-
-# Install dependencies
-RUN yarn install
-
-# Build the application
 RUN yarn build
 
-# SECOND STAGE: Minimal image for running the application
-FROM node:20-slim
-
-# Set the working directory
-WORKDIR /app
-
-# Copy necessary files from the builder stage
-COPY --from=builder /app .
-
-# Expose the application port
 EXPOSE 9000
 
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+CMD ["yarn", "start"]
